@@ -23,6 +23,7 @@ async def get_answer(ctx, question, documents):
     - Пиши на русском языке, официально и понятно.
     
     История сообщений дана только для контекста. Последний вопрос пользователя — самый важный.
+    Пользователь задал вопрос:
     """
 
     user_prompt = f"""
@@ -35,17 +36,21 @@ async def get_answer(ctx, question, documents):
     
     Не используй информацию вне этих документов. Не повторяй всё подряд, а выбери только то, что реально помогает ответить на вопрос.
     """
+    system_default = {"role": "system", "content": system_prompt}
+    user_default = {"role": "user", "content": user_prompt}
+    user_question_default = {"role": "user", "content": question.strip()}
 
     messages = []
     history = await get_user_history(ctx.from_user.id)
     if not history:
-        messages.append({"role": "system", "content": system_prompt})
-        messages.append({"role": "user", "content": user_prompt})
-        await save_history(ctx.from_user.id, "system", {"role": "system", "content": system_prompt + user_prompt})
+        messages.append(system_default)
+        messages.append(user_default)
+        await save_history(ctx.from_user.id, "system", system_default)
+        await save_history(ctx.from_user.id, "user", user_question_default)
     else:
-        await save_history(ctx.from_user.id, "user", {"role": "user", "content": user_prompt})
         messages.extend(msg["msg"] for msg in history)
-    # print(question, "->", user_prompt)
+        messages.append(user_default)
+        await save_history(ctx.from_user.id, "user", user_question_default)
 
     print("Messages: ", messages)
 

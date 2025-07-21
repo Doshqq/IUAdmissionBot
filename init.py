@@ -1,4 +1,5 @@
 from commands.panel import *
+from commands.apply import *
 from bot import dp, bot
 
 

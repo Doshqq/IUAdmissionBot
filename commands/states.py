@@ -5,3 +5,8 @@ class AddingState(StatesGroup):
 
 class CategoryState(StatesGroup):
     awaiting_name = State()
+
+class ApplicationState(StatesGroup):
+    choosing_direction = State()
+    collecting_certificate = State()
+    collecting_photo = State()

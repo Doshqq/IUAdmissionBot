@@ -4,7 +4,6 @@ from dotenv import load_dotenv
 from motor.motor_asyncio import AsyncIOMotorClient
 
 
-#TODO: Hide this
 dotenv_path = Path('.env')
 load_dotenv(dotenv_path=dotenv_path)
 MONGO_URI = os.getenv("MONGO_URI")

@@ -14,7 +14,7 @@ async def save_history(user_id: int, role: str, msg: dict):
     await history_collection.insert_one(doc)
 
 async def get_user_history(user_id: int, limit: int = 3):
-    cursor = history_collection.find({"user_id": user_id}).sort("timestamp").limit(limit)
+    cursor = history_collection.find({"user_id": user_id}).sort("timestamp", -1).limit(limit)
     return await cursor.to_list(length=limit)
 
 async def clear_user_history(user_id: int):

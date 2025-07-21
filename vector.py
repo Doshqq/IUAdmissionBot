@@ -1,7 +1,6 @@
 from sentence_transformers import SentenceTransformer
 
-# Multi-lingual model
-model = SentenceTransformer('sentence-transformers/LaBSE')
+model = SentenceTransformer('intfloat/multilingual-e5-large')
 
 # Add documents
 # docs = [

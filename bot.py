@@ -11,10 +11,10 @@ from aiogram.types import Message
 from aiogram.filters import StateFilter, Command
 
 import document_store
-import localEngine
 from llm import get_answer
 from utils.logger import logger
-from history import save_history, get_user_history
+from history import get_user_history
+
 
 dotenv_path = Path('.env')
 load_dotenv(dotenv_path=dotenv_path)
@@ -24,7 +24,11 @@ bot = Bot(token=str(TOKEN), default=DefaultBotProperties(parse_mode=ParseMode.MA
 router = Router()
 dp = Dispatcher(storage=MemoryStorage())
 dp.include_router(router)
-ADMIN_ID = int(os.getenv("ADMIN_ID"))
+
+try:
+    ADMIN_IDS = [int(x) for x in os.getenv("ADMIN_IDS").split(",")]
+except ValueError:
+    print("ADMIN_IDS is not set in .env file")
 
 
 @router.message(Command(commands="history"))
@@ -49,15 +53,9 @@ async def err_msg(ctx):
 @router.message(StateFilter(None), F.text)
 async def question_processor(ctx: Message):
     question = ctx.text
-
     retrieved_documents = await document_store.search_similar_documents(question)
-
     await bot.send_chat_action(ctx.chat.id, "typing", request_timeout=5)
-
     response = await get_answer(ctx, question, retrieved_documents)
-
-    # response = await localEngine.get_answer(ctx, question, retrieved_documents)
-
 
     if response is None:
         logger.error(f'No response received')
