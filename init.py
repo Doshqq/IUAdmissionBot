@@ -1,5 +1,6 @@
 from commands.panel import *
 from commands.apply import *
+from commands.competitive_lists import *
 from bot import dp, bot
 
 

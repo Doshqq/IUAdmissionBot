@@ -1,36 +1,45 @@
 import pandas as pd
 from datetime import datetime
-from vector import model
+from vector import model, encode
 from db import documents, categories
 
 
 async def save_document(doc_id: str, text: str, category: str, lang: str = "ru"):
-    embedding = model.encode(text).tolist()
+    formatted_text = f"passage: {text}"
+    embedding = encode(formatted_text).tolist()
+    print(len(embedding))
+
     doc = {
         "id": doc_id,
         "data": text,
         "category": category,
         "lang": lang,
         "embedding": embedding,
-        "created_at": datetime.utcnow(),
+        "created_at": datetime.now(),
     }
     await documents.insert_one(doc)
 
 
 async def search_similar_documents(query_text: str, limit: int = 4):
-    query_vector = model.encode(query_text).tolist()
+    user_query = f"query: {query_text}"
+    query_embedding = encode(user_query).tolist()
+    print(len(query_embedding))
 
     pipeline = [
         {
             "$vectorSearch": {
-                "index": "vector",
+                "index": "vector_index",
                 "path": "embedding",
-                "queryVector": query_vector,
+                "queryVector": query_embedding,
                 "numCandidates": 100,
                 "limit": limit,
                 "similarity": "cosine",
-                # "returnStoredSource": True,
-                # "includeScore": True
+            }
+        },
+        {
+            "$project": {
+                "score": {"$meta": "vectorSearchScore"},
+                "data": 1
             }
         }
     ]

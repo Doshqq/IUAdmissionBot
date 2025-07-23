@@ -50,20 +50,20 @@ async def err_msg(ctx):
         "Sorry, I'm having troubles. Please try again later.",
     )
 
-@router.message(StateFilter(None), F.text)
-async def question_processor(ctx: Message):
-    question = ctx.text
-    retrieved_documents = await document_store.search_similar_documents(question)
-    await bot.send_chat_action(ctx.chat.id, "typing", request_timeout=5)
-    response = await get_answer(ctx, question, retrieved_documents)
-
-    if response is None:
-        logger.error(f'No response received')
-        await err_msg(ctx)
-        return
-
-    try:
-        await ctx.answer(response)
-    except TelegramBadRequest as e:
-        print("Got an error with Telegram Parsing: ", e, "\nTrying with parse_mode=None")
-        await ctx.answer(response, parse_mode=None)
+# @router.message(StateFilter(None), F.text)
+# async def question_processor(ctx: Message):
+#     question = ctx.text
+#     retrieved_documents = await document_store.search_similar_documents(question)
+#     await bot.send_chat_action(ctx.chat.id, "typing", request_timeout=5)
+#     response = await get_answer(ctx, question, retrieved_documents)
+#
+#     if response is None:
+#         logger.error(f'No response received')
+#         await err_msg(ctx)
+#         return
+#
+#     try:
+#         await ctx.answer(response)
+#     except TelegramBadRequest as e:
+#         print("Got an error with Telegram Parsing: ", e, "\nTrying with parse_mode=None")
+#         await ctx.answer(response, parse_mode=None)

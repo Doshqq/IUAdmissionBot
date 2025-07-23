@@ -8,7 +8,7 @@ from history import get_user_history, save_history
 async def get_answer(ctx, question, documents):
     client = AsyncClient()
     if not documents:
-        return "Извините, я не могу ответить на этот вопрос, так как не могу найти нужные документы."
+        return "Извините, я не могу ответить на этот вопрос, так как не могу найти нужную информацию."
 
     system_prompt = """
     Ты — виртуальный ассистент приёмной комиссии Университета Иннополис.
