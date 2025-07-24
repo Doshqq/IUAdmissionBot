@@ -1,39 +1,15 @@
-from asyncio import sleep
-
-from aiogram import Router, F
+from aiogram import F
 from aiogram.filters import Command
-from aiogram.types import Message, CallbackQuery, MessageEntity
-from aiogram.fsm.state import State, StatesGroup
+from aiogram.types import Message, CallbackQuery
 from aiogram.fsm.context import FSMContext
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 from aiogram.utils.markdown import bold
 
 from apply_parser import search
-from bot import dp, bot
-from commands.program_data import get_mapped_abiturient_data
+from bot import dp
+from utils.program_data import get_mapped_abiturient_data, level_map, basis_map, category_map
+from utils.states import FindMeState
 
-
-class FindMeState(StatesGroup):
-    education_level = State()
-    enrollment_basis = State()
-    enrollment_category = State()
-    program = State()
-    awaiting_id = State()
-    searching = State()
-
-level_map = {
-    "bachelor": "Бакалавриат",
-    "master": "Магистратура"
-}
-basis_map = {
-    "budget": "Бюджетная основа",
-    "paid": "Полное возмещение затрат",
-    "target": "Целевой приём"
-}
-category_map = {
-    "general": "На общих основаниях",
-    "special": "Имеющие особое право"
-}
 
 @dp.message(Command(commands="findme"))
 async def start_findme(message: Message, state: FSMContext):

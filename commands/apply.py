@@ -6,8 +6,9 @@ from aiogram.fsm.context import FSMContext
 from aiogram.enums import ContentType
 from collections import defaultdict
 
-from commands.states import ApplicationState
-from bot import ADMIN_IDS, dp, router
+from utils.states import ApplicationState
+from bot import dp, router
+from security import ADMIN_IDS
 
 latest_applications = defaultdict(list)
 

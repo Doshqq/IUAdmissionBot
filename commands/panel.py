@@ -7,9 +7,10 @@ from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
 from aiogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
 
-from bot import dp, router, ADMIN_IDS
+from bot import dp, router
+from security import ADMIN_IDS
 from utils.files import extract_text
-from commands.states import AddingState, CategoryState
+from utils.states import AddingState, CategoryState
 from commands.apply import latest_applications
 from db import db
 from document_store import get_categories, get_category_stats, save_document
