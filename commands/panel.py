@@ -122,7 +122,7 @@ async def save_category_name(message: Message, state: FSMContext):
 async def ask_document(callback: CallbackQuery, state: FSMContext):
     category = callback.data.replace("add_cat_", "")
     await state.update_data(category=category)
-    await callback.message.answer(f"📎 Send {md.code(".txt")} or {md.code(".md")} file.")
+    await callback.message.answer(f'📎 Send {md.code(".txt")} or {md.code(".md")} file.')
     await state.set_state(AddingState.awaiting_document)
 
 
